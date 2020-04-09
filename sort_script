@@ -1,0 +1,23 @@
+import csv
+import os
+
+SOURCE_ROOT = 'train'
+DEST_ROOT = 'train2'
+
+with open('Train.csv') as infile:
+    next(infile)  # Skip the header row
+    reader = csv.reader(infile)
+    seen = set()
+    for name, category in reader:
+        # Create a new directory if needed
+        if category not in seen:
+            os.mkdir(os.path.join(DEST_ROOT, category))
+            seen.add(category)
+
+        src = os.path.join(SOURCE_ROOT, name )
+        dest = os.path.join(DEST_ROOT, category, name)
+
+        try:
+            os.rename(src, dest)
+        except WindowsError as e:
+            print(e)
